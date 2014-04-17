@@ -135,10 +135,15 @@ module.exports = function(options, callback) {
 	src += formatFileList(options);
 	
 //	grunt.verbose.writeln('Writing SPEC scriptlet section...');
+	src += readScriptlet('\n%pretrans', options.preTransaction);
 	src += readScriptlet('\n%pre', options.preInstall);
 	src += readScriptlet('\n%post', options.postInstall);
+	src += readScriptlet('\n%triggerin', options.triggerInstall);
+	src += readScriptlet('\n%triggerun', options.triggerUninstall);
 	src += readScriptlet('\n%preun', options.preUninstall);
 	src += readScriptlet('\n%postun', options.postUninstall);
+	src += readScriptlet('\n%triggerpostun', options.triggerPostUninstall);
+	src += readScriptlet('\n%posttrans', options.postTransaction);
 	
 	fs.writeFile(options.specFilepath, src, callback);
 };
