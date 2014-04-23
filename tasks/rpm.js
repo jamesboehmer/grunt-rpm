@@ -9,6 +9,7 @@
 
 var path = require('path');
 var _fs = require('fs');
+var getDirName = require("path").dirname;
 var fs = require('fs.extra');
 var spec = require('./lib/default-spec-writer');
 
@@ -95,14 +96,18 @@ function copyFilesToPack(grunt, buildPath, filesToPack) {
 					} else {
 						// Create a folder inside the destination directory.
 						grunt.verbose.writeln('Creating folder "' + filepathDest + '"');
-						grunt.file.mkdir(filepathDest);
-						callback();
+						fs.mkdirs(filepathDest, callback);
 					}
 				} else {
 					// Copy a file to the destination directory inside the tmp folder.
 					if (fileConfig.link) {
 						grunt.verbose.writeln('Copying symlink "' + fileConfig.src + '->' + fileConfig.link + '" to "' + filepathDest + '"');
-						_fs.symlink(fileConfig.link, filepathDest, 'file', callback);
+						//ensure the parent directory exists when making symlinks
+						fs.mkdirs(getDirName(filepathDest), function(err) {
+							if (err) throw err;
+							_fs.symlink(fileConfig.link, filepathDest, 'file', callback);
+						});
+						
 					}
 					else {
 						grunt.verbose.writeln('Copying file "' + fileConfig.src + '" to "' + filepathDest + '"');
