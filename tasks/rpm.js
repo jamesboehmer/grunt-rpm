@@ -189,7 +189,9 @@ function createRpmMultiTask(grunt) {
 
 		// Merge task-specific and/or target-specific options with these defaults.
 		var options = this.options({
-			destination: 'rpm'
+			destination: 'rpm',
+			autoprov: 'yes',
+			autoreq: 'yes'
 		});
 		
 		// Create the folder structure needed by rpmbuild.
